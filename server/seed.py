@@ -1,25 +1,14 @@
-#!/usr/bin/env python3
-
-from app import app
-from models import db, Plant
+from config import app, db
+from models import Plant
 
 with app.app_context():
+    print("Seeding data...")
 
     Plant.query.delete()
 
-    aloe = Plant(
-        id=1,
-        name="Aloe",
-        image="./images/aloe.jpg",
-        price=11.50,
-    )
+    plant1 = Plant(name="Aloe", image="./images/aloe.jpg", price=11.50)
+    plant2 = Plant(name="ZZ Plant", image="./images/zz-plant.jpg", price=25.98)
 
-    zz_plant = Plant(
-        id=2,
-        name="ZZ Plant",
-        image="./images/zz-plant.jpg",
-        price=25.98,
-    )
-
-    db.session.add_all([aloe, zz_plant])
+    db.session.add_all([plant1, plant2])
     db.session.commit()
+    print("Seeded successfully!")
