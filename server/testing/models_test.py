@@ -1,41 +1,21 @@
-from datetime import date
+# server/models.py
 
-from app import app
-from models import db, Plant
+from flask_sqlalchemy import SQLAlchemy
 
-class TestPlant:
-    '''Plant model in models.py'''
+db = SQLAlchemy()
 
-    def test_can_instantiate(self):
-        '''can be instantiated with a name.'''
-        p = Plant(name="Douglas Fir")
-        assert(p)
-    
-    def test_can_be_created(self):
-        '''can create records that can be committed to the database.'''
-        with app.app_context():
-            p = Plant(name="Douglas Fir")
-            db.session.add(p)
-            db.session.commit()
-            assert(p.id)
+class Plant(db.Model):
+    __tablename__ = 'plants'
 
-            db.session.delete(p)
-            db.session.commit()
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    image = db.Column(db.String)
+    price = db.Column(db.Float)
 
-    def test_can_be_retrieved(self):
-        '''can be used to retrieve records from the database.'''
-        with app.app_context():
-            p = Plant.query.all()
-            assert(p)
-
-    def test_can_be_serialized(self):
-        '''can create records with a to_dict() method for serialization.'''
-        with app.app_context():
-            p = Plant(name="Douglas Fir")
-            db.session.add(p)
-            db.session.commit()
-            p_dict = Plant.query.filter_by(name="Douglas Fir").first().to_dict()
-            assert((type(p_dict) == dict) and (p_dict["name"] == "Douglas Fir"))
-        
-            db.session.delete(p)
-            db.session.commit()
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "image": self.image,
+            "price": self.price
+        }

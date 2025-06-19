@@ -1,23 +1,13 @@
-#!/usr/bin/env python3
+# server/seed.py
 
-from app import app, db
-from models import Plant
+from app import app
+from models import db, Plant
 
 with app.app_context():
     Plant.query.delete()
 
-    aloe = Plant(
-        name="Aloe",
-        image="./images/aloe.jpg",
-        price=11.50,
-    )
+    p1 = Plant(name="Aloe", image="./images/aloe.jpg", price=11.50)
+    p2 = Plant(name="ZZ Plant", image="./images/zz-plant.jpg", price=25.98)
 
-    zz_plant = Plant(
-        name="ZZ Plant",
-        image="./images/zz-plant.jpg",
-        price=25.98,
-    )
-
-    db.session.add_all([aloe, zz_plant])
+    db.session.add_all([p1, p2])
     db.session.commit()
-    print("Database seeded.")
